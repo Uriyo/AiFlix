@@ -29,7 +29,7 @@ const toggle=()=>{
             className="p-4 my-4 w-full rounded-md bg-gray-600"  
           />
           }
-          <input 
+          <input  
             type="text" 
             placeholder="Email" 
             className="p-4 my-4 w-full rounded-md bg-gray-600" />
