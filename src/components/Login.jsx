@@ -5,9 +5,9 @@ import { auth } from "../assets/firebase";
 
 import Header from "./Header"
 import { checkValidateData ,checkValidateName} from "../assets/validate";
-import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addUser } from "../assets/userSlice";
+import { bgURL,userAvtar } from "../assets/constans";
 
 const Login = () => {
  
@@ -17,7 +17,7 @@ const toggle=()=>{
   setIsSignInForm(!isSignInForm);
 };
 
-const navigate=useNavigate();
+
 const dispatch=useDispatch();
 
 const email=useRef(null);
@@ -52,7 +52,7 @@ const handlebtnClick=()=>{
       const user = userCredential.user;
       updateProfile(user, {
         displayName: name.current.value, 
-        photoURL: "https://media.licdn.com/dms/image/D5635AQFws_rprlg32g/profile-framedphoto-shrink_100_100/0/1708486910821?e=1709632800&v=beta&t=r4eC5ue1KbgIVd_aM39BZI1A4tkERuxK0LiU4_W6TpY"
+        photoURL: userAvtar
       })
       .then(() => {
         const {uid,email,displayName,photoURL}=auth.currentUser;
@@ -62,14 +62,12 @@ const handlebtnClick=()=>{
           name:displayName,
           photoURL:photoURL}
         ));
-        navigate("/browse");
         
       }).catch((error) => {
         setErrormsg(error);
         
       });
       console.log("User created successfully: ", user);
-      navigate("/browse");
       
     })
     .catch((error) => {
@@ -85,7 +83,7 @@ const handlebtnClick=()=>{
       // Signed in 
       const user = userCredential.user;
       console.log( "Logged In User :", user);
-      navigate("/browse");
+      
     })
     .catch((error) => {
       const errorMessage = error.message;
@@ -101,7 +99,7 @@ const handlebtnClick=()=>{
     <div>
       <Header/>
       <div className="absolute">
-        <img src="https://assets.nflxext.com/ffe/siteui/vlv3/2e07bc25-8b8f-4531-8e1f-7e5e33938793/e4b3c14a-684b-4fc4-b14f-2b486a4e9f4e/IN-en-20240219-popsignuptwoweeks-perspective_alpha_website_large.jpg" 
+        <img src={bgURL}
         alt="bg"
         />
       </div>
@@ -128,14 +126,6 @@ const handlebtnClick=()=>{
             type="password" 
             placeholder="Password" 
             className="p-4 my-4 w-full rounded-md bg-gray-600 " />
-          {
-          !isSignInForm &&
-          <input
-            type="password"
-            placeholder="Re-write Password"
-            className="p-4 my-4 w-full rounded-md bg-gray-600"  
-          />
-          }
 
           <p className="text-red-600 text-xl px-2">{errormsg}</p>
 

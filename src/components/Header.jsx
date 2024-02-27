@@ -1,24 +1,52 @@
 import {signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import { onAuthStateChanged } from "firebase/auth";
 
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+
+import {addUser, removeUser} from '../assets/userSlice';
 import {auth} from '../assets/firebase';
 import {useSelector } from "react-redux";
+import { logoURL } from "../assets/constans";
 //import { removeUser } from "../assets/userSlice";
 
 
 
 
 const Header = () => {
-  
-  const Navigate=useNavigate();
+  const dispatch=useDispatch();
+  const navigate=useNavigate();
   //const dispatch=useDispatch();
   const user=useSelector(store=>store.user);
+
+  useEffect(()=>{
+    const unsubscribe= onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const {uid,email,displayName,photoURL}=user;
+        dispatch(addUser(
+        { uid:uid,
+          email:email,
+          name:displayName,
+          photoURL:photoURL}
+        ));
+        navigate('/browse');
+      }
+      else {
+        dispatch(removeUser()); 
+        navigate('/');
+
+      }
+    });
+      //this will unsubscribe whenn component unmount
+    return ()=>unsubscribe();
+  },[])
 
 
   const handleSignOut=()=>{
     signOut(auth).then(() => {
       // dispatch(removeUser());
-      Navigate("/")
+      // navigate("/")
     }).catch((error) => {
       console.log(error);
     });
@@ -26,7 +54,7 @@ const Header = () => {
   return (
     <div className="absolute w-screen px-8 py-2 bg-gradient-to-b from-black z-10 flex justify-between">
       <img className="w-44"
-      src="https://cdn.cookielaw.org/logos/dd6b162f-1a32-456a-9cfe-897231c7763c/4345ea78-053c-46d2-b11e-09adaef973dc/Netflix_Logo_PMS.png" alt="logo"
+      src={logoURL} alt="logo"
       />
       {user && (
       <div className="flex p-2">
