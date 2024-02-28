@@ -6,27 +6,30 @@ import Hero from "./Hero.jsx";
 import usePopularMovies from "../hooks/usePopularMovies.js";
 import useTopMovies from "../hooks/useTopMovies.js";
 import useUpcoming from "../hooks/useUpcoming.js";
+import GptSearch from "./GPTSearch.jsx";
+import { useSelector } from "react-redux";
 
 
 const Browse = () => {
   //fetch data from tmdb api and update store
- useNowPlaying();
+ const showGptSearch=useSelector(store=>store.gpt.showGptSearch);
+ 
+  useNowPlaying();
  usePopularMovies();
  useTopMovies();
  useUpcoming();
   return (
     <div>
       <Header/>
-      <Hero/>
-      <SecondaryContainer/>
-      {/* 
-        maincontainer
-          videocontainer
-          title
-        secondary container
-          list
-           cards
-      */}
+      {
+        showGptSearch ?<GptSearch/> : (
+       <>
+          <Hero/>
+          <SecondaryContainer/>
+        </>
+        )
+      }
+      
     </div>
   )
 }
