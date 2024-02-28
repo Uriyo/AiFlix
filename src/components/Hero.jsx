@@ -20,8 +20,6 @@ const Hero = () => {
     <div>
       <VideoTitle title={original_title} overview={overview} />
       <VideoBg movieId={id}/>
-      
-      mainContainer
     </div>
   )
 }
